@@ -11,10 +11,14 @@ def main():
 
 @app.route("/stations")
 def get_stations():
-    with open('../data/juindata.json') as json_data:
-        juind = json.load(json_data)
-    stations = sorted(list(set(map(lambda x: x['station'], juind))))
-    return render_template('stations.html', stations=stations)
+    with open('../data/stations_location.json') as json_data:
+        stationsd = json.load(json_data)
+    stations = sorted(list(map(lambda x: (x['nom'],x['geo']), stationsd)))
+    locations = []
+    for (s,l) in stations:
+        loc = list(map(float, l.split(',')))
+        locations.append((s,loc))
+    return render_template('stations.html', stations=locations)
 
 @app.route("/stations/<string:station_name>")
 def get_station(station_name):
