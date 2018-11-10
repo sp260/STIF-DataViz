@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>dataViz Project</title>
+        <title>STIF DataViz</title>
     </head>
     <body>
         <div class="container">
-            <button onclick="window.location.href='{{ url_for( 'get_stations') }}'" id ='btn'>Stations</button>
+            <button onclick="window.location.href='{{ url_for( 'get_stations') }}'" id ='btn'>Liste des stations</button>
+            <div id="mapid"></div>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
         <script src="../static/graphs.js"></script>

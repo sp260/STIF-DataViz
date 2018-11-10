@@ -3,11 +3,11 @@
     <head>
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>dataViz Project</title>
+        <title>STIF DataViz</title>
     </head>
     <body>
         <div class="container">
-            <button onclick="window.location.href='{{ url_for( 'get_stations') }}'" id ='btn'>Stations</button>
+            <button onclick="window.location.href='{{ url_for( 'get_stations') }}'" id ='btn'>Liste des stations</button>
             <div class="barChart">
                 <canvas id="myChart" width="400" height="400"></canvas>
             </div>
