@@ -26,6 +26,11 @@ def get_stations():
 
 @app.route("/stations/<string:station_name>")
 def get_station(station_name):
+    swag = request.args.get('style', default="bar")
+
+    if swag != "bar" and swag != "line" :
+        swag = "bar"
+
     file_to_read = data_folder / "janvierdata.json"
     with open(str(file_to_read)) as januarydata:
         januaryd = json.load(januarydata)
@@ -43,7 +48,7 @@ def get_station(station_name):
     jrnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jrstations))))
     jnnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jnstations))))
 
-    data = {'station': station_name, 'dates': dates, 'jrNB': jrnumbers, 'jnNB': jnnumbers}
+    data = {'station': station_name, 'dates': dates, 'jrNB': jrnumbers, 'jnNB': jnnumbers, 'style': swag}
     return render_template('station.html', data=data)
 
 if __name__ == '__main__':

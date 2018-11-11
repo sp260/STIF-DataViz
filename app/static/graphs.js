@@ -1,17 +1,21 @@
-function bar_chart(station, dates, jrNB, jnNB){
+function bar_chart(station, dates, jrNB, jnNB, style){
     new Chart(document.getElementById("myChart"), {
-        type: 'bar',
+        type: style,
         data: {
           labels: dates,
           datasets: [
             {
               label: "Janvier",
               backgroundColor: "#3e95cd",
-              data: jrNB
+              borderColor: "#3e95cd",
+              data: jrNB,
+              fill: false
             }, {
               label: "Juin",
               backgroundColor: "#8e5ea2",
-              data: jnNB
+              borderColor: "#8e5ea2",
+              data: jnNB,
+              fill: false
             }
           ]
         },
