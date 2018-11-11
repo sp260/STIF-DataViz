@@ -22,7 +22,7 @@ function bar_chart(station, dates, jrNB, jnNB, style){
         options: {
           title: {
             display: true,
-            text: 'Nombre de passager par jour à '+station
+            text: 'Nombre de passagers par jour à '+station
           },
           responsive: true,
           maintainAspectRatio: false,
@@ -30,7 +30,17 @@ function bar_chart(station, dates, jrNB, jnNB, style){
             yAxes: [{
                 ticks: {
                     beginAtZero:true
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: "Nombre de passagers"
                 }
+            }],
+            xAxes: [{
+              scaleLabel: {
+                  display: true,
+                  labelString: "Jour du mois"
+              }
             }]
           }
         }
