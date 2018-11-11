@@ -26,12 +26,14 @@ def get_stations():
 
 @app.route("/stations/<string:station_name>")
 def get_station(station_name):
-    with open('../data/janvierdata.json') as januarydata:
+    file_to_read = data_folder / "janvierdata.json"
+    with open(str(file_to_read)) as januarydata:
         januaryd = json.load(januarydata)
     jrstations = list(filter(lambda x: x['station'] == station_name, januaryd))
     jrdates = list(map(lambda x: x['date'][-2:], jrstations))
 
-    with open('../data/juindata.json') as junedata:
+    file_to_read = data_folder / "juindata.json"
+    with open(str(file_to_read)) as junedata:
         juned = json.load(junedata)
     jnstations = list(filter(lambda x: x['station'] == station_name, juned))
     jndates = list(map(lambda x: x['date'][-2:], jnstations))

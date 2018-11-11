@@ -1,4 +1,3 @@
-
 function bar_chart(station, dates, jrNB, jnNB){
     new Chart(document.getElementById("myChart"), {
         type: 'bar',
@@ -31,7 +30,7 @@ function bar_chart(station, dates, jrNB, jnNB){
             }]
           }
         }
-    }); 
+    });
 }
 
 var mymap = L.map('mapid').setView([48.866667, 2.333333], 10);
