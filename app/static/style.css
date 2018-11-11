@@ -11,19 +11,12 @@
     margin-right: auto;
 }
 
-.stations {
-    width: 300px;
-    display: table-cell;
-    vertical-align: top;
-    overflow: scroll;
-}
-
 .map {
     display: table-cell;
 }
 
-#mapid { 
-    height: 600px; 
+#mapid {
+    height: 600px;
     margin: 50px;
 }
 
