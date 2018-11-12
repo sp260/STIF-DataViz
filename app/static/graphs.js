@@ -22,7 +22,7 @@ function bar_chart(station, dates, jrNB, jnNB, style){
         options: {
           title: {
             display: true,
-            text: 'Nombre de passagers par jour à '+station
+            text: 'Nombre de passagers par jour à '+ station
           },
           responsive: true,
           maintainAspectRatio: false,

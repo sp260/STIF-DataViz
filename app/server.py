@@ -3,7 +3,6 @@ from flask_restful import Resource, Api
 from pathlib import Path
 import json
 
-
 app = Flask(__name__)
 api = Api(app)
 data_folder = Path(__file__).resolve().parents[1] / "data/"
@@ -50,6 +49,13 @@ def get_station(station_name):
 
     data = {'station': station_name, 'dates': dates, 'jrNB': jrnumbers, 'jnNB': jnnumbers, 'style': swag}
     return render_template('station.html', data=data)
+
+"""
+@app.route("/lignes")
+def get_ligne() :
+    file_to_read = data_folder / "stations.csv"
+    with open(str(file_to_read)) as lignes_list :
+"""
 
 if __name__ == '__main__':
     app.run(port=8080, debug=True)
