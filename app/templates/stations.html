@@ -10,10 +10,10 @@
 <div class="container">
     <div class="col-lg-2" style="overflow:scroll; height : 600px; margin-top:50px;">
         {% for station in stations %}
-            <a href="{{ url_for('get_station', station_name=station[0]) }}">{{station[0]}}</a>
+            <div id={{station[0]}}><a href="{{ url_for('get_station', station_name=station[0]) }}">{{station[0]}}</a></div>
             <br />
             <script type="text/javascript">
-                var marker = L.marker(station[1]).addTo(mymap);
+                L.marker({{station[1]|tojson}}).addTo(mymap);
             </script>
         {% endfor %}
     </div>
