@@ -8,18 +8,25 @@
 
 {% block content %}
 <div class="container">
-    <div class="col-lg-2" style="overflow:scroll; height : 600px; margin-top:50px;">
+    <div class="col-lg-3 stations">
         {% for station in stations %}
-            <div id={{station[0]}}><a href="{{ url_for('get_station', station_name=station[0]) }}">{{station[0]}}</a></div>
+            <div id={{station[2]}}><a class="first after" href="{{ url_for('get_station', station_name=station[0]) }}">{{station[0]}}</a></div>
             <br />
-            <script type="text/javascript">
-                L.marker({{station[1]|tojson}}).addTo(mymap);
-            </script>
         {% endfor %}
     </div>
-    <div style="margin-left:15em;">
+    <div class="col-lg-9 map">
         <div id="mapid"></div>
     </div>
+    <script src="../static/map.js"></script>
+    <script type="text/javascript">
+        var marker
+        {% for station in stations %}
+            document.getElementById({{station[2]|tojson}}).onmouseover = function(e) {
+                mymap.removeLayer(marker);
+                mymap.setView({{station[1]}}, 11);   
+                marker = new L.marker({{station[1]}}).addTo(mymap);
+            };
+        {% endfor %}
+    </script>
 </div>
-<script src="../static/graphs.js"></script>
 {% endblock %}

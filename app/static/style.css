@@ -15,23 +15,64 @@
     display: table-cell;
 }
 
-#mapid {
-    height: 600px;
-    margin: 50px;
+.stations {
+    overflow:scroll; 
+    height : 600px; 
 }
 
-a {
-    color: blue;
-    font-size: 12px;
-    text-decoration: none;
+#mapid {
+    height: 600px;
+}
+
+// stations links
+
+a,a:visited,a:hover,a:active{
+    -webkit-backface-visibility:hidden;
+    backface-visibility:hidden;
+    position:relative;
+    transition:0.5s color ease;
+    text-decoration:none;
+    color:#4687af;
+    font-size:1em;
+}
+a:hover{
+    color:#242580;
+}
+a.after:after{
+    content: "";
+    transition:0.5s all ease;
+    -webkit-backface-visibility:hidden;
+    backface-visibility:hidden;
+    position:absolute;
+}
+a.after:after{
+    bottom:-0.25em;
+}
+a.after:after{
+    height:5px;
+    height:0.35rem;
+    width:0;
+    background:#242580;
+}
+a.first:after{
+    left:0;
+}
+a.after:hover:after{
+    width:100%;
 }
 
 .navbar {
-    margin-top : 10px;
+    margin-top: 10px;
 }
 
 .footer {
     background-color:rgb(248,248,248); 
     margin-top: 10px; 
     margin-bottom: 10px
+}
+
+.btnViz {
+    position: absolute;
+    top: 25px;
+    right: 5px;
 }

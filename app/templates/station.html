@@ -8,22 +8,22 @@
 {% block title %}Statistique par nom{% endblock %}
 
 {% block content %}
-
+<div class="col_lg-3">
+  {% if data.style == "bar" %}
+    <a href="{{request.base_url}}?style=line" class="btnViz" role="button">Visualiser sous forme de courbes !</a>
+  {% else %}
+    <a href="{{request.base_url}}?style=bar" class="btnViz" role="button">Visualiser sous forme de batons !</a>
+  {% endif %}
+</div>
 <div class="container">
     <div class="barChart">
         <canvas id="myChart" width="400" height="400"></canvas>
     </div>
 </div>
-<br />
-<div class="col-lg-4"></div>
-<div class="col_lg-4">
-  {% if data.style == "bar" %}
-    <a href="{{request.base_url}}?style=line" class="btn btn-info" role="button">Visualiser sous forme de courbes !</a>
-  {% else %}
-    <a href="{{request.base_url}}?style=bar" class="btn btn-info" role="button">Visualiser sous forme de batons !</a>
-  {% endif %}
-</div>
 <script type="text/javascript">
     bar_chart({{data.station|tojson}}, {{data.dates|tojson}}, {{data.jrNB|tojson}}, {{data.jnNB|tojson}}, {{data.style|tojson}});
 </script>
 {% endblock %}
+
+
+<!--btn btn-info-->

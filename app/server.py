@@ -15,18 +15,25 @@ def main():
 def get_stations():
     file_to_read = data_folder / "stations_location.json"
     with open(str(file_to_read)) as json_data:
-        stationsd = json.load(json_data)
-    stations = sorted(list(map(lambda x: (x['nom'],x['geo']), stationsd)))
+        lstationsd = json.load(json_data)
+    lstations = list(map(lambda x: (x['nom'],x['geo']), lstationsd))
+
+    file_to_read = data_folder / "janvierdata.json"
+    with open(str(file_to_read)) as json_data:
+        jrstationsd = json.load(json_data)
+    jrstations = list(set(map(lambda x: x['station'], jrstationsd)))
+
+    stations = sorted(list(filter(lambda x: x[0] in jrstations, lstations)))
     locations = []
     for (s,l) in stations:
         loc = list(map(float, l.split(',')))
-        locations.append((s,loc))
+        id = ''.join(e for e in s if e.isalnum())
+        locations.append((s,loc,id))
     return render_template('stations.html', stations=locations)
 
 @app.route("/stations/<string:station_name>")
 def get_station(station_name):
     swag = request.args.get('style', default="bar")
-
     if swag != "bar" and swag != "line" :
         swag = "bar"
 
