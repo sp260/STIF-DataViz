@@ -20,11 +20,15 @@
     height : 600px; 
 }
 
-#mapid {
+#bigmapid, #mapid {
     height: 600px;
 }
 
-// stations links
+.btnwrapper {
+    position: absolute;
+    top: 25px;
+    right: 5px;
+}
 
 a,a:visited,a:hover,a:active{
     -webkit-backface-visibility:hidden;
@@ -35,9 +39,11 @@ a,a:visited,a:hover,a:active{
     color:#4687af;
     font-size:1em;
 }
+
 a:hover{
     color:#242580;
 }
+
 a.after:after{
     content: "";
     transition:0.5s all ease;
@@ -45,18 +51,22 @@ a.after:after{
     backface-visibility:hidden;
     position:absolute;
 }
+
 a.after:after{
     bottom:-0.25em;
 }
+
 a.after:after{
     height:5px;
     height:0.35rem;
     width:0;
     background:#242580;
 }
+
 a.first:after{
     left:0;
 }
+
 a.after:hover:after{
     width:100%;
 }
@@ -71,8 +81,3 @@ a.after:hover:after{
     margin-bottom: 10px
 }
 
-.btnViz {
-    position: absolute;
-    top: 25px;
-    right: 5px;
-}

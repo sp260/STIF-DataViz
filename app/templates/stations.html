@@ -10,7 +10,7 @@
 <div class="container">
     <div class="col-lg-3 stations">
         {% for station in stations %}
-            <div id={{station[2]}}><a class="first after" href="{{ url_for('get_station', station_name=station[0]) }}">{{station[0]}}</a></div>
+            <div class="wrapper" id={{station[2]}}><a class="first after" href="{{ url_for('get_station', station_name=station[0]) }}">{{station[0]}}</a></div>
             <br />
         {% endfor %}
     </div>
