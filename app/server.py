@@ -60,9 +60,8 @@ def get_station(station_name):
 """
 @app.route("/lignes")
 def get_ligne() :
-    file_to_read = data_folder / "stations.csv"
-    with open(str(file_to_read)) as lignes_list :
 """
+
 
 if __name__ == '__main__':
     app.run(port=8080, debug=True)
