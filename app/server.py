@@ -29,7 +29,22 @@ def get_stations():
         loc = list(map(float, l.split(',')))
         id = ''.join(e for e in s if e.isalnum())
         locations.append((s,loc,id))
-    return render_template('stations.html', stations=locations)
+    
+    lines = {}
+    name = ''
+    if 'station' in request.args:
+        name = request.args.get('station')
+        file_to_read = data_folder / "lines.json"
+        with open(str(file_to_read)) as json_data:
+            linesd = json.load(json_data)
+
+        for line in linesd:
+            if request.args.get('station') in line['nom']:
+                lines[line['ligne']] = []
+                for i, s in enumerate(line['nom']):
+                    lines[line['ligne']].append((line['nom'][i],line['geo'][i]))
+
+    return render_template('stations.html', stations=locations, lines=lines, name=name)
 
 @app.route("/stations/<string:station_name>")
 def get_station(station_name):

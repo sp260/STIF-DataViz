@@ -7,11 +7,12 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     accessToken: 'pk.eyJ1Ijoic3AyNjAiLCJhIjoiY2pvYmdkZ2FqMTM4eTNrb3hjeWtscGd3YSJ9.7ssTMgSANp8_iggwgQnr-Q'
 }).addTo(mymap);
 
-var marker = new L.marker([48.866667, 2.333333]).addTo(mymap);
+/*var marker = new L.marker([48.866667, 2.333333]).addTo(mymap);
 marker.bindPopup("Paris");
 marker.on('mouseover', function (e) {
     this.openPopup();
 });
 marker.on('mouseout', function (e) {
     this.closePopup();
-});
+});*/
+mymap.setView([48.866667, 2.333333], 11); 

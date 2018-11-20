@@ -10,23 +10,34 @@
 <div class="container">
     <div class="col-lg-3 stations">
         {% for station in stations %}
-            <div class="wrapper" id={{station[2]}}><a class="first after" href="{{ url_for('get_station', station_name=station[0]) }}">{{station[0]}}</a></div>
+            <div class="wrapper" id={{station[2]}}><a class="first after" href="{{request.base_url}}?station={{station[0]}}">{{station[0]}}</a></div>
             <br />
         {% endfor %}
     </div>
     <div class="col-lg-9 map">
         <div id="mapid"></div>
     </div>
+
+    <script src="../static/markers.js"></script>
     <script src="../static/map.js"></script>
     <script type="text/javascript">
-        var marker
-        {% for station in stations %}
-            document.getElementById({{station[2]|tojson}}).onmouseover = function(e) {
-                mymap.removeLayer(marker);
-                mymap.setView({{station[1]}}, 11);   
-                marker = new L.marker({{station[1]}}).addTo(mymap);
-            };
-        {% endfor %}
+        
+        if ({{name|tojson}} != '') {
+            {% for key, value in lines.items() %}
+                {% for s in value %}
+                    var k = {{s[1]|tojson}};
+                    {% if name == s[0] %}
+                        mymap.setView(k.split(" "), 12); 
+                        var marker = L.marker(k.split(" "), {icon: blackIcon}).addTo(mymap);
+                        marker.bindPopup({{s[0]|tojson}}).openPopup();
+                    {% else %}
+                        var line = {{key|tojson}}
+                        L.marker(k.split(" "), {icon: getMarker(line) }).addTo(mymap);
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        }
+
     </script>
 </div>
 {% endblock %}
