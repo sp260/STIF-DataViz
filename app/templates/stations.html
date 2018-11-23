@@ -22,18 +22,22 @@
     <script src="../static/markers.js"></script>
     <script src="../static/map.js"></script>
     <script type="text/javascript">
-        
+        var markers = []
+        var lines = "";
         if ({{name|tojson}} != '') {
             {% for key, value in lines.items() %}
+                var line = {{key|tojson}};
                 {% for s in value %}
                     var k = {{s[1]|tojson}};
                     {% if name == s[0] %}
+                        lines += line+", ";
                         mymap.setView(k.split(" "), 12); 
                         var marker = L.marker(k.split(" "), {icon: blackIcon}).addTo(mymap);
-                        marker.bindPopup("Station <b>"+{{s[0]|tojson}}+"</b><br>Ligne <b>"+{{key|tojson}}+"</b>").openPopup();
+                        marker.bindPopup("Station <b>"+{{s[0]|tojson}}+"</b><br>Ligne <b>"+lines+"</b>").openPopup();
                     {% else %}
-                        var line = {{key|tojson}}
-                        L.marker(k.split(" "), {icon: getMarker(line) }).addTo(mymap);
+                        var m = L.marker(k.split(" "), {icon: getMarker(line) }).addTo(mymap);
+                        m.bindPopup("Station <b>"+{{s[0]|tojson}}+"</b><br>Ligne <b>"+line+"</b>");
+                        markers.push(m)
                     {% endif %}
                 {% endfor %}
             {% endfor %}
