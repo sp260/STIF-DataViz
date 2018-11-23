@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, jsonify
 from flask_restful import Resource, Api
 from pathlib import Path
+import datetime
 import json
 
 app = Flask(__name__)
@@ -56,20 +57,47 @@ def get_station(station_name):
     with open(str(file_to_read)) as januarydata:
         januaryd = json.load(januarydata)
     jrstations = list(filter(lambda x: x['station'] == station_name, januaryd))
-    jrdates = list(map(lambda x: x['date'][-2:], jrstations))
+    #jrdates = list(map(lambda x: x['date'][-2:], jrstations))
 
     file_to_read = data_folder / "juindata.json"
     with open(str(file_to_read)) as junedata:
         juned = json.load(junedata)
     jnstations = list(filter(lambda x: x['station'] == station_name, juned))
-    jndates = list(map(lambda x: x['date'][-2:], jnstations))
+    #jndates = list(map(lambda x: x['date'][-2:], jnstations))
 
     #Intersection : We don't have the same dates for January and June
-    dates = list(filter(lambda x: x in jrdates, jndates))
-    jrnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jrstations))))
-    jnnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jnstations))))
+    #dates = list(filter(lambda x: x in jrdates, jndates))
+    #jrnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jrstations))))
+    #jnnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jnstations))))
 
-    data = {'station': station_name, 'dates': dates, 'jrNB': jrnumbers, 'jnNB': jnnumbers, 'style': swag}
+    jrvalues = [0, 0, 0, 0, 0, 0, 0]
+    jrnb = [0, 0, 0, 0, 0, 0, 0]
+    for x in jrstations:
+        date = x['date'].split('-')
+        day = int(date[2])
+        month = int(date[1])
+        year = int(date[0])
+        d = datetime.date(year,month,day).weekday()
+        jrvalues[d] += x['number']
+        jrnb[d] += 1
+
+    jnvalues = [0, 0, 0, 0, 0, 0, 0]
+    jnnb = [0, 0, 0, 0, 0, 0, 0]
+    for x in jnstations:
+        date = x['date'].split('-')
+        day = int(date[2])
+        month = int(date[1])
+        year = int(date[0])
+        d = datetime.date(year,month,day).weekday()
+        jnvalues[d] += x['number']
+        jnnb[d] += 1
+    
+    days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+    jrvalues = [int(v/jrnb[i]) for i, v in enumerate(jrvalues)]
+    jnvalues = [int(v/jnnb[i]) for i, v in enumerate(jnvalues)]
+
+    data = {'station': station_name, 'dates': days, 'jrNB': jrvalues, 'jnNB': jnvalues, 'style': swag}
+
     return render_template('station.html', data=data)
 
 """
