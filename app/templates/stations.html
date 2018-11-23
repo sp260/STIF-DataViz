@@ -11,6 +11,7 @@
     <div class="col-lg-3 stations">
         {% for station in stations %}
             <div class="wrapper" id={{station[2]}}><a class="first after" href="{{request.base_url}}?station={{station[0]}}">{{station[0]}}</a></div>
+            <!-- Double click : {{ url_for('get_station', station_name=station[0]) }} -->
             <br />
         {% endfor %}
     </div>
@@ -29,7 +30,7 @@
                     {% if name == s[0] %}
                         mymap.setView(k.split(" "), 12); 
                         var marker = L.marker(k.split(" "), {icon: blackIcon}).addTo(mymap);
-                        marker.bindPopup({{s[0]|tojson}}).openPopup();
+                        marker.bindPopup("Station <b>"+{{s[0]|tojson}}+"</b><br>Ligne <b>"+{{key|tojson}}+"</b>").openPopup();
                     {% else %}
                         var line = {{key|tojson}}
                         L.marker(k.split(" "), {icon: getMarker(line) }).addTo(mymap);
