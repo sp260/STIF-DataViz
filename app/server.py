@@ -30,7 +30,7 @@ def get_stations():
         loc = list(map(float, l.split(',')))
         id = ''.join(e for e in s if e.isalnum())
         locations.append((s,loc,id))
-    
+
     lines = {}
     name = ''
     if 'station' in request.args:
@@ -71,7 +71,7 @@ def get_station(station_name):
     #jnnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jnstations))))
 
     jrvalues = [0, 0, 0, 0, 0, 0, 0]
-    jrnb = [0, 0, 0, 0, 0, 0, 0]
+    jrnb = [1, 1, 1, 1, 1, 1, 1]
     for x in jrstations:
         date = x['date'].split('-')
         day = int(date[2])
@@ -82,7 +82,7 @@ def get_station(station_name):
         jrnb[d] += 1
 
     jnvalues = [0, 0, 0, 0, 0, 0, 0]
-    jnnb = [0, 0, 0, 0, 0, 0, 0]
+    jnnb = [1, 1, 1, 1, 1, 1, 1]
     for x in jnstations:
         date = x['date'].split('-')
         day = int(date[2])
@@ -91,7 +91,7 @@ def get_station(station_name):
         d = datetime.date(year,month,day).weekday()
         jnvalues[d] += x['number']
         jnnb[d] += 1
-    
+
     days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
     jrvalues = [int(v/jrnb[i]) for i, v in enumerate(jrvalues)]
     jnvalues = [int(v/jnnb[i]) for i, v in enumerate(jnvalues)]

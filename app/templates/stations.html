@@ -2,6 +2,7 @@
 
 {% block scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="../static/click.js"></script>
 {% endblock %}
 
 {% block title %}Stations{% endblock %}
@@ -10,8 +11,22 @@
 <div class="container">
     <div class="col-lg-3 stations">
         {% for station in stations %}
-            <div class="wrapper" id={{station[2]}}><a class="first after" href="{{request.base_url}}?station={{station[0]}}">{{station[0]}}</a></div>
-            <!-- Double click : {{ url_for('get_station', station_name=station[0]) }} -->
+            <div class="wrapper">
+              <a class="first after" id="{{station[2]}}" style="cursor:pointer;">{{station[0]}}</a>
+
+              <script type="text/javascript">
+                $("#{{station[2]}}").single_double_click(function () {
+                  var ident = "{{station[0]}}";
+                  var test = "{{request.base_url}}?station=" + ident;
+                  window.location.href = test;
+                }, function () {
+                  var ident = "{{station[0]}}";
+                  var test = "{{ url_for('get_station', station_name=" + ident +")}}";
+                  window.location.href = test;
+                });
+              </script>
+            </div>
+
             <br />
         {% endfor %}
     </div>
@@ -21,6 +36,8 @@
 
     <script src="../static/markers.js"></script>
     <script src="../static/map.js"></script>
+
+
     <script type="text/javascript">
         var markers = []
         var lines = "";
@@ -30,8 +47,8 @@
                 {% for s in value %}
                     var k = {{s[1]|tojson}};
                     {% if name == s[0] %}
-                        lines += line+", ";
-                        mymap.setView(k.split(" "), 12); 
+                        lines += line+" ";
+                        mymap.setView(k.split(" "), 12);
                         var marker = L.marker(k.split(" "), {icon: blackIcon}).addTo(mymap);
                         marker.bindPopup("Station <b>"+{{s[0]|tojson}}+"</b><br>Ligne <b>"+lines+"</b>").openPopup();
                     {% else %}
