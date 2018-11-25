@@ -71,7 +71,7 @@ def get_station(station_name):
     #jnnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jnstations))))
 
     jrvalues = [0, 0, 0, 0, 0, 0, 0]
-    jrnb = [1, 1, 1, 1, 1, 1, 1]
+    jrnb = [0, 0, 0, 0, 0, 0, 0]
     for x in jrstations:
         date = x['date'].split('-')
         day = int(date[2])
@@ -82,7 +82,7 @@ def get_station(station_name):
         jrnb[d] += 1
 
     jnvalues = [0, 0, 0, 0, 0, 0, 0]
-    jnnb = [1, 1, 1, 1, 1, 1, 1]
+    jnnb = [0, 0, 0, 0, 0, 0, 0]
     for x in jnstations:
         date = x['date'].split('-')
         day = int(date[2])
