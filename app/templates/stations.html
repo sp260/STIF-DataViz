@@ -20,8 +20,7 @@
                   var test = "{{request.base_url}}?station=" + ident;
                   window.location.href = test;
                 }, function () {
-                  var ident = "{{station[0]}}";
-                  var test = "{{ url_for('get_station', station_name=" + ident +")}}";
+                  var test = "{{ url_for('get_station', station_name=station[0])}}";
                   window.location.href = test;
                 });
               </script>
