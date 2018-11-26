@@ -50,7 +50,8 @@ def get_stations():
 @app.route("/stations/<string:station_name>")
 def get_station(station_name):
     swag = request.args.get('style', default="bar")
-    if swag != "bar" and swag != "line" :
+    super_swag = request.args.get('vacs', default="full")
+    if swag != "bar" and swag != "line" and swag != "stache":
         swag = "bar"
 
     file_to_read = data_folder / "janvierdata.json"
@@ -70,35 +71,62 @@ def get_station(station_name):
     #jrnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jrstations))))
     #jnnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jnstations))))
 
-    jrvalues = [0, 0, 0, 0, 0, 0, 0]
-    jrnb = [0, 0, 0, 0, 0, 0, 0]
-    for x in jrstations:
-        date = x['date'].split('-')
-        day = int(date[2])
-        month = int(date[1])
-        year = int(date[0])
-        d = datetime.date(year,month,day).weekday()
-        jrvalues[d] += x['number']
-        jrnb[d] += 1
+    if swag == "stache" :
+        if super_swag != "full" and super_swag != "both" :
+            super_swag = "full"
 
-    jnvalues = [0, 0, 0, 0, 0, 0, 0]
-    jnnb = [0, 0, 0, 0, 0, 0, 0]
-    for x in jnstations:
-        date = x['date'].split('-')
-        day = int(date[2])
-        month = int(date[1])
-        year = int(date[0])
-        d = datetime.date(year,month,day).weekday()
-        jnvalues[d] += x['number']
-        jnnb[d] += 1
+        to_work = data_folder / "work.json"
+        to_vacs = data_folder / "holidays.json"
+        to_full = data_folder / "full_year.json"
 
-    days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
-    jrvalues = [int(v/jrnb[i]) for i, v in enumerate(jrvalues)]
-    jnvalues = [int(v/jnnb[i]) for i, v in enumerate(jnvalues)]
+        vacs_file = open(str(to_vacs), 'r')
+        work_file = open(str(to_work), 'r')
+        full_file = open(str(to_full), 'r')
 
-    data = {'station': station_name, 'dates': days, 'jrNB': jrvalues, 'jnNB': jnvalues, 'style': swag}
+        vacs = json.load(vacs_file)
+        work = json.load(work_file)
+        full = json.load(full_file)
 
-    return render_template('station.html', data=data)
+        if super_swag == "full" :
+            dico = full[station_name]
+            data = {'station' : station_name, 'style' : swag, 'super_style' : super_swag, 'dico' : dico}
+        else :
+            dicowork = work[station_name]
+            dicovacs = vacs[station_name]
+            data = {'station' : station_name, 'style' : swag, 'super_style' : super_swag, 'dico_vac' : dicovacs, 'dico_work' : dicowork}
+
+        return render_template('station.html', data=data)
+
+    else :
+        jrvalues = [0, 0, 0, 0, 0, 0, 0]
+        jrnb = [0, 0, 0, 0, 0, 0, 0]
+        for x in jrstations:
+            date = x['date'].split('-')
+            day = int(date[2])
+            month = int(date[1])
+            year = int(date[0])
+            d = datetime.date(year,month,day).weekday()
+            jrvalues[d] += x['number']
+            jrnb[d] += 1
+
+        jnvalues = [0, 0, 0, 0, 0, 0, 0]
+        jnnb = [0, 0, 0, 0, 0, 0, 0]
+        for x in jnstations:
+            date = x['date'].split('-')
+            day = int(date[2])
+            month = int(date[1])
+            year = int(date[0])
+            d = datetime.date(year,month,day).weekday()
+            jnvalues[d] += x['number']
+            jnnb[d] += 1
+
+        days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+        jrvalues = [int(v/jrnb[i]) for i, v in enumerate(jrvalues)]
+        jnvalues = [int(v/jnnb[i]) for i, v in enumerate(jnvalues)]
+
+        data = {'station': station_name, 'dates': days, 'jrNB': jrvalues, 'jnNB': jnvalues, 'style': swag}
+
+        return render_template('station.html', data=data)
 
 """
 @app.route("/lignes")

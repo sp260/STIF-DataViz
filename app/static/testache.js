@@ -554,111 +554,113 @@
 
 var legendTemplate = "<span class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><span style=\"background-color:<%=datasets[i].strokeColor%>\">&nbsp;&nbsp;&nbsp;</span>&nbsp;<%if(datasets[i].label){%><%=datasets[i].label%><%}%>&nbsp;&nbsp;<%}%></span>";
 
-var boxChartData = {
-  labels : ["Vacances", "Travail"],
-  datasets : [
-    {
-      label: "Lundi",
-      fillColor: "rgba(0, 102, 255, 0.2)",
-      strokeColor : "rgba(151,187,205,1)",
-      pointColor : "rgba(151,187,205,1)",
-      pointStrokeColor : "#fff",
-      pointHighlightFill : "#fff",
-      pointHighlightStroke : "rgba(151,187,205,1)",
-      data : [
-        [10, 4, 7, 5, 7],
-        [5, 4, 4, 4, 7]
-      ]
-    },
-    {
-      label: "Mardi",
-      fillColor: "rgba(102, 0, 255, 0.2)",
-      strokeColor : "rgba(187,151,205,1)",
-      pointColor : "rgba(187,151,205,1)",
-      pointStrokeColor : "#fff",
-      pointHighlightFill : "#fff",
-      pointHighlightStroke : "rgba(187,151,205,1)",
-      data : [
-        [15, 7, 5, 3, 7],
-        [10, 4, 7, 5, 7]
-      ]
-    },
-    {
-      label: "Mercredi",
-      fillColor: "rgba(119, 136, 153, 0.2)",
-      strokeColor : "rgba(220,220,220,1)",
-      pointColor : "rgba(220,220,220,1)",
-      pointStrokeColor : "#fff",
-      pointHighlightFill : "#fff",
-      pointHighlightStroke : "rgba(220,220,220,1)",
-      data : [
-        [25, 5, 6, 4, 5],
-        [5, 4, 4, 4, 7]
-      ]
-    },
-    {
-      label: "Jeudi",
-      fillColor: "rgba(119, 36, 53, 0.2)",
-      strokeColor : "rgba(220,120,220,1)",
-      pointColor : "rgba(220,120,220,1)",
-      pointStrokeColor : "#fff",
-      pointHighlightFill : "#fff",
-      pointHighlightStroke : "rgba(220,120,220,1)",
-      data : [
-        [25, 5, 6, 4, 5],
-        [5, 4, 4, 4, 7]
-      ]
-    },
-    {
-      label: "Vendredi",
-      fillColor: "rgba(119, 36, 53, 0.2)",
-      strokeColor : "rgba(220,120,220,1)",
-      pointColor : "rgba(220,120,220,1)",
-      pointStrokeColor : "#fff",
-      pointHighlightFill : "#fff",
-      pointHighlightStroke : "rgba(220,120,220,1)",
-      data : [
-        [25, 5, 6, 4, 5],
-        [5, 4, 4, 4, 7]
-      ]
-    },
-    {
-      label: "Samedi",
-      fillColor: "rgba(119, 36, 53, 0.2)",
-      strokeColor : "rgba(220,120,220,1)",
-      pointColor : "rgba(220,120,220,1)",
-      pointStrokeColor : "#fff",
-      pointHighlightFill : "#fff",
-      pointHighlightStroke : "rgba(220,120,220,1)",
-      data : [
-        [25, 5, 6, 4, 5],
-        [5, 4, 4, 4, 7]
-      ]
-    },
-    {
-      label: "Dimanche",
-      fillColor: "rgba(119, 36, 53, 0.2)",
-      strokeColor : "rgba(220,120,220,1)",
-      pointColor : "rgba(220,120,220,1)",
-      pointStrokeColor : "#fff",
-      pointHighlightFill : "#fff",
-      pointHighlightStroke : "rgba(220,120,220,1)",
-      data : [
-        [25, 5, 6, 4, 5],
-        [5, 4, 4, 4, 7]
-      ]
-    }
-  ]
-};
+function makewhiskers(vacances, pas_vacances){
+	var boxChartData = {
+	  labels : ["Vacances", "Travail"],
+	  datasets : [
+	    {
+	      label: "Lundi",
+	      fillColor: "rgba(0, 102, 255, 0.2)",
+	      strokeColor : "rgba(151,187,205,1)",
+	      pointColor : "rgba(151,187,205,1)",
+	      pointStrokeColor : "#fff",
+	      pointHighlightFill : "#fff",
+	      pointHighlightStroke : "rgba(151,187,205,1)",
+	      data : [
+	        vacances[0],
+	        pas_vacances[0]
+	      ]
+	    },
+	    {
+	      label: "Mardi",
+	      fillColor: "rgba(102, 0, 255, 0.2)",
+	      strokeColor : "rgba(187,151,205,1)",
+	      pointColor : "rgba(187,151,205,1)",
+	      pointStrokeColor : "#fff",
+	      pointHighlightFill : "#fff",
+	      pointHighlightStroke : "rgba(187,151,205,1)",
+	      data : [
+					vacances[1],
+	        pas_vacances[1]
+	      ]
+	    },
+	    {
+	      label: "Mercredi",
+	      fillColor: "rgba(119, 136, 153, 0.2)",
+	      strokeColor : "rgba(220,220,220,1)",
+	      pointColor : "rgba(220,220,220,1)",
+	      pointStrokeColor : "#fff",
+	      pointHighlightFill : "#fff",
+	      pointHighlightStroke : "rgba(220,220,220,1)",
+	      data : [
+					vacances[2],
+	        pas_vacances[2]
+	      ]
+	    },
+	    {
+	      label: "Jeudi",
+	      fillColor: "rgba(119, 36, 53, 0.2)",
+	      strokeColor : "rgba(220,120,220,1)",
+	      pointColor : "rgba(220,120,220,1)",
+	      pointStrokeColor : "#fff",
+	      pointHighlightFill : "#fff",
+	      pointHighlightStroke : "rgba(220,120,220,1)",
+	      data : [
+					vacances[3],
+	        pas_vacances[3]
+	      ]
+	    },
+	    {
+	      label: "Vendredi",
+	      fillColor: "rgba(119, 36, 53, 0.2)",
+	      strokeColor : "rgba(220,120,220,1)",
+	      pointColor : "rgba(220,120,220,1)",
+	      pointStrokeColor : "#fff",
+	      pointHighlightFill : "#fff",
+	      pointHighlightStroke : "rgba(220,120,220,1)",
+	      data : [
+					vacances[4],
+	        pas_vacances[4]
+	      ]
+	    },
+	    {
+	      label: "Samedi",
+	      fillColor: "rgba(119, 36, 53, 0.2)",
+	      strokeColor : "rgba(220,120,220,1)",
+	      pointColor : "rgba(220,120,220,1)",
+	      pointStrokeColor : "#fff",
+	      pointHighlightFill : "#fff",
+	      pointHighlightStroke : "rgba(220,120,220,1)",
+	      data : [
+					vacances[5],
+	        pas_vacances[5]
+	      ]
+	    },
+	    {
+	      label: "Dimanche",
+	      fillColor: "rgba(119, 36, 53, 0.2)",
+	      strokeColor : "rgba(220,120,220,1)",
+	      pointColor : "rgba(220,120,220,1)",
+	      pointStrokeColor : "#fff",
+	      pointHighlightFill : "#fff",
+	      pointHighlightStroke : "rgba(220,120,220,1)",
+	      data : [
+					vacances[6],
+	        pas_vacances[6]
+	      ]
+	    }
+	  ]
+	};
 
-var ctx = document.getElementById("box-plot").getContext("2d");
-var myBar = new Chart(ctx).BoxPlot(boxChartData, {
-  animation: false,
-  responsive : false,
-  showTooltips: true,
-  legendTemplate: legendTemplate,
-  scaleShowHorizontalLines: true,
-  scaleShowVerticalLines: true
-});
-var legende = myBar.generateLegend();
-$('#box-plot-legende').html(legende);
+	var ctx = document.getElementById("box-plot").getContext("2d");
+	var myBar = new Chart(ctx).BoxPlot(boxChartData, {
+	  animation: false,
+	  responsive : false,
+	  showTooltips: true,
+	  legendTemplate: legendTemplate,
+	  scaleShowHorizontalLines: true,
+	  scaleShowVerticalLines: true
+	});
+	var legende = myBar.generateLegend();
+	$('#box-plot-legende').html(legende);
+};

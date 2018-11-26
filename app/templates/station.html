@@ -3,6 +3,7 @@
 {% block scripts %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <script src="../static/graphs.js"></script>
+<script src="../static/testache.js"></script>
 {% endblock %}
 
 {% block title %}Statistique par nom{% endblock %}
@@ -11,18 +12,40 @@
 <div class="btnwrapper">
   {% if data.style == "bar" %}
     <a href="{{request.base_url}}?style=line" role="button">Visualiser sous forme de courbes !</a>
+    &nbsp;
+    <a href="{{request.base_url}}?style=stache&vacs=full" role="button">Visualiser les moyennes annuelles !</a>
+  {% elif data.style == "line" %}
+    <a href="{{request.base_url}}?style=bar" role="button">Visualiser sous forme de batons !</a>
+    &nbsp;
+    <a href="{{request.base_url}}?style=stache&vacs=full" role="button">Visualiser les moyennes annuelles !</a>
   {% else %}
+    <a href="{{request.base_url}}?style=line" role="button">Visualiser sous forme de courbes !</a>
+    &nbsp;
     <a href="{{request.base_url}}?style=bar" role="button">Visualiser sous forme de batons !</a>
   {% endif %}
 </div>
-<div class="container">
-    <div class="barChart">
-        <canvas id="myChart" width="400" height="400"></canvas>
-    </div>
-</div>
-<script type="text/javascript">
-    bar_chart({{data.station|tojson}}, {{data.dates|tojson}}, {{data.jrNB|tojson}}, {{data.jnNB|tojson}}, {{data.style|tojson}});
-</script>
+
+{% if data.style == "bar" or data.style == "line" %}
+  <div class="container">
+      <div class="barChart">
+          <canvas id="myChart" width="400" height="400"></canvas>
+      </div>
+  </div>
+  <script type="text/javascript">
+      bar_chart({{data.station|tojson}}, {{data.dates|tojson}}, {{data.jrNB|tojson}}, {{data.jnNB|tojson}}, {{data.style|tojson}});
+  </script>
+{% else %}
+  <div class="container">
+    <canvas id="box-plot" width="400" height="338"></canvas>
+    <div id="box-plot-legende"></div>
+  </div>
+  <script type="text/javascript">
+      echo('cc');
+      echo({{data.dico_vac}});
+      makewhiskers({{data.dico_vac}}, {{data.dico_work}});
+  </script>
+{% endif %}
+
 {% endblock %}
 
 <!--btn btn-info-->
