@@ -10,7 +10,70 @@ data_folder = Path(__file__).resolve().parents[1] / "data/"
 
 @app.route("/")
 def main():
-    return render_template('index.html')
+    file_to_read = data_folder / "stations_location.json"
+    with open(str(file_to_read)) as json_data:
+        data = json.load(json_data)
+    exploitants = {'Autres':[]}
+    for s in data:
+        for e in s['exploitant']:
+            if not e in exploitants:
+                if e in ['RATP', 'SNCF']:
+                    exploitants[e] = []
+                    exploitants[e].append(s['nom'])
+                else:
+                    exploitants['Autres'].append(s['nom'])
+            else:
+                exploitants[e].append(s['nom'])
+
+    k = list(exploitants.keys())
+    exploitants['nbrs'] = [len(v) for v in exploitants.values()]
+    exploitants['exploitants'] = k
+    return render_template('index.html', data=exploitants)
+
+@app.route("/lines")
+def get_lines():    
+    file_to_read = data_folder / "full_year.json"
+    with open(str(file_to_read)) as json_data:
+        data = json.load(json_data)
+
+    lines = {}
+    file_to_read = data_folder / "lines.json"
+    with open(str(file_to_read)) as json_data:
+        linesd = json.load(json_data)
+
+    for line in linesd:
+        id = ''.join(e for e in line['ligne'] if e.isalnum())
+        lines[line['ligne']] = (id, [])
+        for i, s in enumerate(line['nom']):
+            lines[line['ligne']][1].append(line['nom'][i])
+
+    weekdays = {}
+    for k, v in lines.items():
+        weekdays[k] = [0, 0, 0, 0, 0, 0, 0]
+        for s in v[1]:
+            if s in data:
+                for day, values in data[s].items():
+                    alldays = list(map(int, values))
+                    weekdays[k][int(day)] += int(sum(alldays)/len(alldays))
+
+    weekdays.pop("FUNICULAIR")
+    weekdays.pop("T11")
+    
+    categorizedlines = {"RER": {}, "LignesTransilien": {}, "Metro": {}, "Tramway": {}, "Autres": {}}
+
+    for k, v in weekdays.items():
+        if "RER" in k:
+            categorizedlines["RER"][k] = v
+        elif "LIGNE" in k:
+            categorizedlines["LignesTransilien"][k] = v
+        elif "M" in k:
+            categorizedlines["Metro"][k] = v
+        elif "T" in k:
+            categorizedlines["Tramway"][k] = v
+        else:
+            categorizedlines["Autres"][k] = v
+
+    return render_template('lines.html', data=categorizedlines)
 
 @app.route("/stations")
 def get_stations():
@@ -58,18 +121,11 @@ def get_station(station_name):
     with open(str(file_to_read)) as januarydata:
         januaryd = json.load(januarydata)
     jrstations = list(filter(lambda x: x['station'] == station_name, januaryd))
-    #jrdates = list(map(lambda x: x['date'][-2:], jrstations))
 
     file_to_read = data_folder / "juindata.json"
     with open(str(file_to_read)) as junedata:
         juned = json.load(junedata)
     jnstations = list(filter(lambda x: x['station'] == station_name, juned))
-    #jndates = list(map(lambda x: x['date'][-2:], jnstations))
-
-    #Intersection : We don't have the same dates for January and June
-    #dates = list(filter(lambda x: x in jrdates, jndates))
-    #jrnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jrstations))))
-    #jnnumbers = list(map(lambda x: x['number'], list(filter(lambda x: x['date'][-2:] in dates, jnstations))))
 
     if swag == "stache" :
         if super_swag != "full" and super_swag != "both" :
@@ -119,6 +175,10 @@ def get_station(station_name):
             d = datetime.date(year,month,day).weekday()
             jnvalues[d] += x['number']
             jnnb[d] += 1
+
+        for i in range(7):
+            if jrnb[i]==0: jrnb[i]=1
+            if jnnb[i]==0: jnnb[i]=1
 
         days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
         jrvalues = [int(v/jrnb[i]) for i, v in enumerate(jrvalues)]

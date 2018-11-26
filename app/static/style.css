@@ -11,13 +11,31 @@
     margin-right: auto;
 }
 
+.lineChart {
+    width: 1000px;
+    height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.lines {
+    padding: 100px;
+}
+
+.pieChart {
+    width: 400px;
+    height: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .map {
     display: table-cell;
 }
 
 .stations {
-    overflow:scroll;
-    height : 600px;
+    overflow:scroll; 
+    height : 600px; 
 }
 
 #bigmapid, #mapid {
@@ -37,6 +55,7 @@ a,a:visited,a:hover,a:active{
     transition:0.5s color ease;
     text-decoration:none;
     color:#4687af;
+    font-size:1em;
 }
 
 a:hover{
@@ -75,7 +94,8 @@ a.after:hover:after{
 }
 
 .footer {
-    background-color:rgb(248,248,248);
-    margin-top: 10px;
+    background-color:rgb(248,248,248); 
+    margin-top: 10px; 
     margin-bottom: 10px
 }
+

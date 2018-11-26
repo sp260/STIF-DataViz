@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="../static/graphs.js"></script>
+{% endblock %}
+
+{% block title %}Statistique par nom{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="col-lg-3 lines">
+        {% for key, value in data.items() %}
+            <input type="checkbox" id="{{key}}"/> {{key}} <br /><br />
+        {% endfor %} 
+    </div>
+    <div class="col-lg-9 lineChart">
+        <canvas id="line-chart" width="400" height="225"></canvas>
+    </div>
+</div>
+<script type="text/javascript"> 
+    $(document).ready(function() {
+        //Initial state
+        lineChart({{data.RER|tojson}}, true);
+        document.getElementById("RER").checked = true;
+
+        {% for key, value in data.items() %}
+            $('#{{key}}').change(function() {
+                if($(this).is(":checked")) {
+                    lineChart({{value|tojson}}, true);
+                } else {
+                    lineChart({{value|tojson}}, false);
+                }
+            });
+        {% endfor %}
+    });
+</script>
+{% endblock %}
