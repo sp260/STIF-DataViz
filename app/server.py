@@ -12,6 +12,7 @@ data_folder = Path(__file__).resolve().parents[1] / "data/"
 
 @app.route("/")
 def main():
+    #donut exploitants
     file_to_read = data_folder / "stations_location.json"
     with open(str(file_to_read)) as json_data:
         data = json.load(json_data)
@@ -27,10 +28,29 @@ def main():
             else:
                 exploitants[e].append(s['nom'])
 
+    #pie stations
     k = list(exploitants.keys())
     exploitants['nbrs'] = [len(v) for v in exploitants.values()]
     exploitants['exploitants'] = k
-    return render_template('index.html', data=exploitants)
+
+    file_to_read = data_folder / "final_work.json"
+    with open(str(file_to_read)) as json_data:
+        sdata = json.load(json_data)
+    
+    attendance = []
+    for station, weekdays in sdata.items():
+        week = 0
+        for day, values in weekdays.items():
+            alldays = list(map(int, values))
+            week += int(sum(alldays)/len(alldays))
+        attendance.append((station, int(week/7)))
+
+    frequenting = {}
+    attendance.sort(key=lambda tup: tup[1], reverse=True)
+    frequenting["stations"] = [tup[0] for tup in attendance[:5]]
+    frequenting["nbrs"] = [tup[1] for tup in attendance[:5]]
+
+    return render_template('index.html', data=exploitants, attendance=frequenting)
 
 @app.route("/lines")
 def get_lines():

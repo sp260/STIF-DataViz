@@ -99,14 +99,14 @@ function lineChart(data, action){
   });
 };
 
-function pie_chart(exploitants, nbrs){
-  new Chart(document.getElementById("pie-chart"), {
+function donut_chart(exploitants, nbrs){
+  new Chart(document.getElementById("donut-chart"), {
     type: 'doughnut',
     data: {
       labels: exploitants,
       datasets: [{
         label: "Nombre de stations",
-        backgroundColor: ["#3e95cd", "#c45850","#3cba9f"],
+        backgroundColor: ["#c45850", "#3e95cd", "#3cba9f"],
         data: nbrs
       }]
     },
@@ -117,4 +117,28 @@ function pie_chart(exploitants, nbrs){
       }
     }
   });
+};
+
+function horizontalBarChart(stations, nbrs){
+  new Chart(document.getElementById("bar-chart-horizontal"), {
+    type: 'horizontalBar',
+    data: {
+      labels: stations,
+      datasets: [
+        {
+          label: "Fréquentation par jour ouvré",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: nbrs
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Les stations les plus fréquentées par jour ouvré'
+      }
+    }
+});
+
 };
