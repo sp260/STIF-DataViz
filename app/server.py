@@ -3,6 +3,8 @@ from flask_restful import Resource, Api
 from pathlib import Path
 import datetime
 import json
+import numpy as np
+import statistics as stat
 
 app = Flask(__name__)
 api = Api(app)
@@ -31,7 +33,7 @@ def main():
     return render_template('index.html', data=exploitants)
 
 @app.route("/lines")
-def get_lines():    
+def get_lines():
     file_to_read = data_folder / "full_year.json"
     with open(str(file_to_read)) as json_data:
         data = json.load(json_data)
@@ -58,7 +60,7 @@ def get_lines():
 
     weekdays.pop("FUNICULAIR")
     weekdays.pop("T11")
-    
+
     categorizedlines = {"RER": {}, "LignesTransilien": {}, "Metro": {}, "Tramway": {}, "Autres": {}}
 
     for k, v in weekdays.items():
@@ -113,7 +115,7 @@ def get_stations():
 @app.route("/stations/<string:station_name>")
 def get_station(station_name):
     swag = request.args.get('style', default="bar")
-    super_swag = request.args.get('vacs', default="full")
+    super_swag = request.args.get('vacs', default="both")
     if swag != "bar" and swag != "line" and swag != "stache":
         swag = "bar"
 
@@ -128,28 +130,98 @@ def get_station(station_name):
     jnstations = list(filter(lambda x: x['station'] == station_name, juned))
 
     if swag == "stache" :
-        if super_swag != "full" and super_swag != "both" :
-            super_swag = "full"
+        if super_swag != "both" :
+            super_swag = "both"
 
-        to_work = data_folder / "work.json"
-        to_vacs = data_folder / "holidays.json"
-        to_full = data_folder / "full_year.json"
+        to_work = data_folder / "final_work.json"
+        to_vacs = data_folder / "final_holidays.json"
 
         vacs_file = open(str(to_vacs), 'r')
         work_file = open(str(to_work), 'r')
-        full_file = open(str(to_full), 'r')
 
         vacs = json.load(vacs_file)
         work = json.load(work_file)
-        full = json.load(full_file)
 
-        if super_swag == "full" :
-            dico = full[station_name]
-            data = {'station' : station_name, 'style' : swag, 'super_style' : super_swag, 'dico' : dico}
-        else :
+        if super_swag == "both" :
             dicowork = work[station_name]
             dicovacs = vacs[station_name]
-            data = {'station' : station_name, 'style' : swag, 'super_style' : super_swag, 'dico_vac' : dicovacs, 'dico_work' : dicowork}
+            stats_vacs = []
+            stats_work = []
+
+            for i in range(0,7) :
+                if str(i) not in dicovacs :
+                    dicovacs[str(i)] = []
+
+                if str(i) not in dicowork :
+                    dicowork[str(i)] = []
+
+                liste_work = []
+                liste_vac = []
+
+                q1_work = 0
+                q3_work = 0
+                q1_vac = 0
+                q3_vac = 0
+                mediane_vac = 0
+                mediane_work = 0
+                max_work = 0
+                max_vac = 0
+                min_work = 0
+                min_vac = 0
+
+                order_vac = sorted(dicovacs[str(i)])
+                middle_vac = int(len(order_vac)/2)
+                order_work = sorted(dicowork[str(i)])
+                middle_work = int(len(order_work)/2)
+
+                if (len(order_work) % 2 == 0 and len(order_work) != 0) :
+                   q1_work = int(stat.median(order_work[:middle_work]))
+                   q3_work = int(stat.median(order_work[middle_work:]))
+                   mediane_work = int(stat.median(order_work))
+                   max_work = order_work[len(order_work) - 1]
+                   min_work = order_work[0]
+                elif (len(order_work) != 0) :
+                   q1_work = int(stat.median(order_work[:middle_work]))
+                   q3_work = int(stat.median(order_work[middle_work+1:]))
+                   mediane_work = int(stat.median(order_work))
+                   max_work = order_work[len(order_work) - 1]
+                   min_work = order_work[0]
+
+                if (len(order_vac) % 2 == 0 and len(order_vac) != 0) :
+                   q1_vac = int(stat.median(order_vac[:middle_vac]))
+                   q3_vac = int(stat.median(order_vac[middle_vac:]))
+                   mediane_vac = int(stat.median(order_vac))
+                   max_vac = order_vac[len(order_vac) - 1]
+                   min_vac = order_vac[0]
+                elif (order_vac != []) :
+                   mediane_vac = int(stat.median(order_vac))
+                   max_vac = order_vac[len(order_vac) - 1]
+                   min_vac = order_vac[0]
+                   if order_vac[:middle_vac] != [] :
+                       q1_vac = int(stat.median(order_vac[:middle_vac]))
+                   else :
+                       q1_vac = min_vac
+                   if order_vac[middle_vac+1:] != [] :
+                       q3_vac = int(stat.median(order_vac[middle_vac+1:]))
+                   else :
+                       q3_vac = max_vac
+
+
+                liste_work.append(min_work)
+                liste_work.append(q1_work)
+                liste_work.append(mediane_work)
+                liste_work.append(q3_work)
+                liste_work.append(max_work)
+                stats_work.append(liste_work)
+
+                liste_vac.append(min_vac)
+                liste_vac.append(q1_vac)
+                liste_vac.append(mediane_vac)
+                liste_vac.append(q3_vac)
+                liste_vac.append(max_vac)
+                stats_vacs.append(liste_vac)
+
+            data = {'station' : station_name, 'style' : swag, 'super_style' : super_swag, 'dico_vac' : stats_vacs, 'dico_work' : stats_work}
 
         return render_template('station.html', data=data)
 

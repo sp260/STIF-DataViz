@@ -1,9 +1,11 @@
 {% extends "layout.html" %}
 
 {% block scripts %}
+<link rel="stylesheet" href="https://cdn.anychart.com/css/latest/anychart-ui.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
 <script src="../static/graphs.js"></script>
-<script src="../static/testache.js"></script>
+<script src="../static/whiskers_boxes.js"></script>
 {% endblock %}
 
 {% block title %}Statistique par nom{% endblock %}
@@ -13,11 +15,11 @@
   {% if data.style == "bar" %}
     <a href="{{request.base_url}}?style=line" role="button">Visualiser sous forme de courbes !</a>
     &nbsp;
-    <a href="{{request.base_url}}?style=stache&vacs=full" role="button">Visualiser les moyennes annuelles !</a>
+    <a href="{{request.base_url}}?style=stache&vacs=both" role="button">Visualiser les moyennes annuelles !</a>
   {% elif data.style == "line" %}
     <a href="{{request.base_url}}?style=bar" role="button">Visualiser sous forme de batons !</a>
     &nbsp;
-    <a href="{{request.base_url}}?style=stache&vacs=full" role="button">Visualiser les moyennes annuelles !</a>
+    <a href="{{request.base_url}}?style=stache&vacs=both" role="button">Visualiser les moyennes annuelles !</a>
   {% else %}
     <a href="{{request.base_url}}?style=line" role="button">Visualiser sous forme de courbes !</a>
     &nbsp;
@@ -35,14 +37,10 @@
       bar_chart({{data.station|tojson}}, {{data.dates|tojson}}, {{data.jrNB|tojson}}, {{data.jnNB|tojson}}, {{data.style|tojson}});
   </script>
 {% else %}
-  <div class="container">
-    <canvas id="box-plot" width="400" height="338"></canvas>
-    <div id="box-plot-legende"></div>
-  </div>
+  <div id="container" style="width: 500px; height: 400px;"></div>
+
   <script type="text/javascript">
-      echo('cc');
-      echo({{data.dico_vac}});
-      makewhiskers({{data.dico_vac}}, {{data.dico_work}});
+    do_whiskers({{data.dico_vac}}, {{data.dico_work}});
   </script>
 {% endif %}
 

@@ -47,7 +47,7 @@ function bar_chart(station, dates, jrNB, jnNB, style){
     });
 }
 
-var colors = ["#3e95cd", "#8e5ea2", "#a18800", "#e8c3b9", "#c45850", "#3cba9f", "#a18882", "#6c0000", "#6ca200", "#140051", "#e44d2d", "#d9e42d","#2dbae4", "#2d49e4", "#6c2de4", "#ec1fdf"];
+var colors = ["#3e95cd", "#8e5ea2", "#a18800", "#e8c3b9", "#c45850", "#3cba9f", "#a18882", "#6c0000", "#6ca200", "#140051", "#e44d2d", "#d9e42d","#2dbae4", "#2d49e4", "#6c2de4", "#ec1fdf", "#F0F8FF", "#8A2BE2", "#00008B", "#FF7F50", "#DC143C", "#006400", "#FF00FF", "#F08080", "#20B2AA"];
 var jsonLines = {};
 
 function jsonConcat(o1, o2) {
@@ -68,8 +68,8 @@ function get_datasets(dico){
   var c = 0;
   var table = []
   for (var key in dico) {
-    if (dico.hasOwnProperty(key)) {           
-      table.push({ 
+    if (dico.hasOwnProperty(key)) {
+      table.push({
         data: dico[key],
         label: key,
         borderColor: colors[c],
@@ -83,7 +83,7 @@ function get_datasets(dico){
 
 function lineChart(data, action){
   action ? jsonConcat(jsonLines, data) : jsonDelete(jsonLines, data);
-  
+
   new Chart(document.getElementById("line-chart"), {
     type: 'line',
     data: {
