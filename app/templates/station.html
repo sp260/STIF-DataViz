@@ -37,11 +37,15 @@
       bar_chart({{data.station|tojson}}, {{data.dates|tojson}}, {{data.jrNB|tojson}}, {{data.jnNB|tojson}}, {{data.style|tojson}});
   </script>
 {% else %}
-  <div id="container" style="width: 500px; height: 400px;"></div>
-
+  <br />
+  <br />
+  <div id="container" style="width: 600px; height: 500px; margin-left: 350px;"></div>
+  <div class="row"></div>
   <script type="text/javascript">
     do_whiskers({{data.dico_vac}}, {{data.dico_work}});
   </script>
+  <br />
+  <br />
 {% endif %}
 
 {% endblock %}
