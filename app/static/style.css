@@ -41,6 +41,8 @@
     height: 400px;
     margin-left: auto;
     margin-right: auto;
+    float: right;
+    margin-right:200px;
 }
 
 .map {

@@ -136,9 +136,31 @@ function horizontalBarChart(stations, nbrs){
       legend: { display: false },
       title: {
         display: true,
-        text: 'Les stations les plus fréquentées par jour ouvré'
+        text: 'Les stations les plus fréquentées par jour'
       }
     }
 });
+};
 
+function horizontalBarChartWE(stations, nbrs){
+  new Chart(document.getElementById("bar-chart-horizontalWE"), {
+    type: 'horizontalBar',
+    data: {
+      labels: stations,
+      datasets: [
+        {
+          label: "Fréquentation par jour",
+          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+          data: nbrs
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Les stations les plus fréquentées par jour de weekend'
+      }
+    }
+});
 };

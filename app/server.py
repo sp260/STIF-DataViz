@@ -12,7 +12,7 @@ data_folder = Path(__file__).resolve().parents[1] / "data/"
 
 @app.route("/")
 def main():
-    #donut exploitants
+    #donut for exploitants
     file_to_read = data_folder / "stations_location.json"
     with open(str(file_to_read)) as json_data:
         data = json.load(json_data)
@@ -28,11 +28,11 @@ def main():
             else:
                 exploitants[e].append(s['nom'])
 
-    #pie stations
     k = list(exploitants.keys())
     exploitants['nbrs'] = [len(v) for v in exploitants.values()]
     exploitants['exploitants'] = k
 
+    #horizontal bar for stations in business days
     file_to_read = data_folder / "final_work.json"
     with open(str(file_to_read)) as json_data:
         sdata = json.load(json_data)
@@ -41,20 +41,35 @@ def main():
     for station, weekdays in sdata.items():
         week = 0
         for day, values in weekdays.items():
-            alldays = list(map(int, values))
-            week += int(sum(alldays)/len(alldays))
-        attendance.append((station, int(week/7)))
+            if day in ["0", "1", "2", "3", "4"]:
+                alldays = list(map(int, values))
+                week += int(sum(alldays)/len(alldays))
+        attendance.append((station, int(week/5)))
 
-    frequenting = {}
+    frequenting = {"businessdays": {}, "weekend": {}}
     attendance.sort(key=lambda tup: tup[1], reverse=True)
-    frequenting["stations"] = [tup[0] for tup in attendance[:5]]
-    frequenting["nbrs"] = [tup[1] for tup in attendance[:5]]
+    frequenting["businessdays"]["stations"] = [tup[0] for tup in attendance[:5]]
+    frequenting["businessdays"]["nbrs"] = [tup[1] for tup in attendance[:5]]
+
+    #horizontal bar for stations in weekend    
+    attendanceWE = []
+    for station, weekdays in sdata.items():
+        week = 0
+        for day, values in weekdays.items():
+            if day in ["5", "6"]:
+                alldays = list(map(int, values))
+                week += int(sum(alldays)/len(alldays))
+        attendanceWE.append((station, int(week/2)))
+
+    attendanceWE.sort(key=lambda tup: tup[1], reverse=True)
+    frequenting["weekend"]["stations"] = [tup[0] for tup in attendanceWE[:5]]
+    frequenting["weekend"]["nbrs"] = [tup[1] for tup in attendanceWE[:5]]
 
     return render_template('index.html', data=exploitants, attendance=frequenting)
 
 @app.route("/lines")
 def get_lines():
-    file_to_read = data_folder / "full_year.json"
+    file_to_read = data_folder / "final_work.json"
     with open(str(file_to_read)) as json_data:
         data = json.load(json_data)
 
